@@ -7,6 +7,7 @@ class Threat:
         self.type: Optional[str] = None
         self.date_publication: Optional[str] = None
         self.description: Optional[str] = None
+        self.feature: Optional[str] = None
 
 
 Threats = list[Threat]
