@@ -1,4 +1,4 @@
-from structure import config_service, threats_repository
+from structure import config_service, threats_repository, matplotlib_wrapper
 from telethon.sync import TelegramClient
 from telegram_scraper import TelegramScraper
 from constants import OUTPUT_FILE, CHANNELS_NAMES
@@ -12,4 +12,7 @@ client.start()
 
 telegram_scraper = TelegramScraper(client)
 list_threats = telegram_scraper.scrape_channels(CHANNELS_NAMES)
-threats_repository.save_on_json_file(OUTPUT_FILE, list_threats)
+statistics = telegram_scraper.get_statistics_by_type(list_threats)
+
+matplotlib_wrapper.get_statisctics_chart(statistics)
+threats_repository.save_on_json_file(OUTPUT_FILE, list_threats, statistics)

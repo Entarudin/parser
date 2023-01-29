@@ -1,3 +1,5 @@
+from enum import Enum
+
 KEYWORDS = [
     "слабое место",
     "слабость",
@@ -156,6 +158,14 @@ THREATS_KEYWORDS = [
     "нарушение",
     "реализация"
 ]
+
+
+class TypeThreatsEnum(str, Enum):
+    VULNERABILITY_TYPE = 'Уязвимость'
+    ATTACK_TYPE = 'Атака'
+    INCIDENT_TYPE = 'Инцидент'
+    THREAT_TYPE = 'Угроза'
+
 
 CHANNELS_NAMES = [
     "New_Vulnerability",
