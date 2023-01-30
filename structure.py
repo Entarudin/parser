@@ -3,19 +3,42 @@ from translators import ListTranslator, ThreatTranslator, StatisticsThreatsTrans
 from services import ConfigService
 from repositories import ThreatsRepository
 from wrappers import MatplotlibWrapper
+from telegram_scraper import TelegramScraper
 
-threat_translator = ThreatTranslator()
-threats_translator = ListTranslator(threat_translator)
-
-statistics_threats_translator = StatisticsThreatsTranslator()
-threats_repository = ThreatsRepository(threats_translator, statistics_threats_translator)
-
-config_service = ConfigService()
-
-matplotlib_wrapper = MatplotlibWrapper()
+# Todo: make wrapper
+from telethon.sync import TelegramClient
 
 
 class Structure:
+    @cached_property
+    def telegram_api_id(self):
+        return self.config_service.telegram_api_id
+
+    @cached_property
+    def telegram_api_hash(self):
+        return self.config_service.telegram_api_hash
+
+    @cached_property
+    def telegram_phone(self):
+        return self.config_service.telegram_phone
+
+    @cached_property
+    def telegram_client(self):
+        # maybe start inside scraper
+        return TelegramClient(
+            self.telegram_phone,
+            self.telegram_api_id,
+            self.telegram_api_hash
+        )
+
+    @cached_property
+    def telegram_scraper(self):
+        return TelegramScraper(self.telegram_client)
+
+    @cached_property
+    def config_service(self):
+        return ConfigService()
+
     @cached_property
     def threat_translator(self):
         return ThreatTranslator()
@@ -34,10 +57,6 @@ class Structure:
             self.threats_translator,
             self.statistics_threats_translator
         )
-
-    @cached_property
-    def config_service(self):
-        return ConfigService()
 
     @cached_property
     def matplotlib_wrapper(self):

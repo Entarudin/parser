@@ -1,16 +1,10 @@
-from structure import config_service, threats_repository, matplotlib_wrapper
-from telethon.sync import TelegramClient
-from telegram_scraper import TelegramScraper
+from structure import structure
 from constants import OUTPUT_FILE, CHANNELS_NAMES
 
-API_ID = config_service.get_telegram_api_id()
-API_HASH = config_service.get_telegram_api_hash()
-PHONE = config_service.get_telegram_phone()
+telegram_scraper = structure.telegram_scraper
+matplotlib_wrapper = structure.matplotlib_wrapper
+threats_repository = structure.threats_repository
 
-client = TelegramClient(PHONE, API_ID, API_HASH)
-client.start()
-
-telegram_scraper = TelegramScraper(client)
 list_threats = telegram_scraper.scrape_channels(CHANNELS_NAMES)
 statistics = telegram_scraper.get_statistics_by_type(list_threats)
 
