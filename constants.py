@@ -8,8 +8,8 @@ CHANNELS_NAMES = [
     "EchelonEyes",
     "haccking",
     "manual_pentesting",
+    "crypto_security_lab",
     "RUSCADASEC",
-    "crypto_security_lab"
 ]
 
 OUTPUT_FILE = "channel_threats.json"
