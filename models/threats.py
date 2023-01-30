@@ -8,6 +8,3 @@ class Threat:
         self.date_publication: Optional[str] = None
         self.description: Optional[str] = None
         self.feature: Optional[str] = None
-
-
-Threats = list[Threat]
