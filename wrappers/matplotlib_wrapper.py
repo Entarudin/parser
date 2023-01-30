@@ -11,10 +11,10 @@ class MatplotlibWrapper:
         filename = f'images/{img_id}.png'
 
         labels = [
-            TypeThreatsEnum.THREAT_TYPE.value,
-            TypeThreatsEnum.VULNERABILITY_TYPE.value,
-            TypeThreatsEnum.INCIDENT_TYPE.value,
-            TypeThreatsEnum.ATTACK_TYPE.value
+            TypeThreatsEnum.THREAT.value,
+            TypeThreatsEnum.VULNERABILITY.value,
+            TypeThreatsEnum.INCIDENT.value,
+            TypeThreatsEnum.ATTACK.value
         ]
         values = [
             statistics.count_threats,

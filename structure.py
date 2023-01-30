@@ -5,6 +5,8 @@ from services import ConfigService
 from repositories import ThreatsRepository
 from wrappers import MatplotlibWrapper, TelethonWrapper
 from telegram_scraper import TelegramScraper
+from sign_parser import SignParser
+from constants import KEYWORD_FEATURE_PAIRS, KEYWORD_THREAT_TYPE_PAIRS
 
 
 class Structure:
@@ -30,7 +32,19 @@ class Structure:
 
     @cached_property
     def telegram_scraper(self):
-        return TelegramScraper(self.telegram_client)
+        return TelegramScraper(
+            self.telegram_client,
+            self.feature_parser,
+            self.threat_type_parser
+        )
+
+    @cached_property
+    def feature_parser(self):
+        return SignParser(KEYWORD_FEATURE_PAIRS)
+
+    @cached_property
+    def threat_type_parser(self):
+        return SignParser(KEYWORD_THREAT_TYPE_PAIRS)
 
     @cached_property
     def config_service(self):

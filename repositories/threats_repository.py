@@ -1,4 +1,4 @@
-from models import Threats, StatisticsThreats
+from models import Threat, StatisticsThreats
 import json
 
 
@@ -7,7 +7,7 @@ class ThreatsRepository:
         self.threats_translator = threats_translator
         self.statistics_threats_translator = statistics_threats_translator
 
-    def save_on_json_file(self, filename: str, threats: Threats, statistics_threats: StatisticsThreats):
+    def save_on_json_file(self, filename: str, threats: list[Threat], statistics_threats: StatisticsThreats):
         with open(filename, 'w', encoding='utf8') as json_file:
             presented = {
                 "threats": self.threats_translator.to_dict(threats),
