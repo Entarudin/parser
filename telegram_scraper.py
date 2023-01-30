@@ -1,27 +1,9 @@
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetHistoryRequest
+from sign_parser import SignParser
 from constants import (
     UNIQUE_KEYWORDS,
-    VULNERABILITIES_KEYWORDS,
-    ATTACKS_KEYWORDS,
-    INCIDENTS_KEYWORDS,
-    THREATS_KEYWORDS,
     TypeThreatsEnum,
-    FeatureThreatsEnum,
-    FEATURE_DATA_KEYWORDS,
-    FEATURE_CYBER_KEYWORDS,
-    FEATURE_VIRUS_KEYWORDS,
-    FEATURE_ATTACKS_KEYWORDS,
-    FEATURE_HACKING_KEYWORDS,
-    FEATURE_SNIFFER_KEYWORDS,
-    FEATURE_THREATS_KEYWORDS,
-    FEATURE_ENCRYPTION_KEYWORDS,
-    FEATURE_INTERCEPTION_KEYWORDS,
-    FEATURE_INTRUDER_KEYWORDS,
-    FEATURE_MONITORING_KEYWORDS,
-    FEATURE_SECURITY_KEYWORDS,
-    FEATURE_VULNERABILITIES_KEYWORDS,
-    FEATURE_LEAK_INFORMATION_KEYWORDS,
 )
 from models import Threat, StatisticsThreats
 import re
@@ -29,9 +11,16 @@ from datetime import datetime, timedelta
 
 
 class TelegramScraper:
-    def __init__(self, client: TelegramClient):
+    def __init__(
+            self,
+            client: TelegramClient,
+            feature_parser: SignParser,
+            threat_type_parser: SignParser,
+    ):
         self.client = client
         self.min_count_coincidences_with_unique_keywords = 2
+        self.feature_parser = feature_parser
+        self.threat_type_parser = threat_type_parser
 
     def scrape_channels(self, channels_names: list[str]) -> list[Threat]:
         result = []
@@ -91,10 +80,10 @@ class TelegramScraper:
 
     def __build_threat(self, channel_name, message_id, message_text, message_date) -> Threat | None:
         threat = Threat()
-        threat.type = self.__get_type_threat_by_description(message_text)
+        threat.type = self.threat_type_parser.parse(message_text)
         if not threat.type:
             return None
-        threat.feature = self.__get_feature_threats_by_description(message_text)
+        threat.feature = self.feature_parser.parse(message_text)
         if not threat.feature:
             return None
         threat.source = self.__build_message_url(channel_name, message_id)
@@ -111,46 +100,6 @@ class TelegramScraper:
             if word.lower() in string.lower():
                 count_coincidences += 1
         return count_coincidences >= self.min_count_coincidences_with_unique_keywords
-
-    def __get_type_threat_by_description(self, description: str) -> str | None:
-        keyword_type_pairs = [
-            (VULNERABILITIES_KEYWORDS, TypeThreatsEnum.VULNERABILITY.value),
-            (ATTACKS_KEYWORDS, TypeThreatsEnum.ATTACK.value),
-            (INCIDENTS_KEYWORDS, TypeThreatsEnum.INCIDENT.value),
-            (THREATS_KEYWORDS, TypeThreatsEnum.THREAT.value)
-        ]
-        return self.__find_value_by_pairs(description, keyword_type_pairs)
-
-    def __get_feature_threats_by_description(self, description: str) -> str | None:
-        keyword_feature_pairs = [
-            (FEATURE_THREATS_KEYWORDS, FeatureThreatsEnum.THREAT.value),
-            (FEATURE_LEAK_INFORMATION_KEYWORDS, FeatureThreatsEnum.LEAK_INFORMATION.value),
-            (FEATURE_VULNERABILITIES_KEYWORDS, FeatureThreatsEnum.VULNERABILITY.value),
-            (FEATURE_SECURITY_KEYWORDS, FeatureThreatsEnum.SECURITY.value),
-            (FEATURE_MONITORING_KEYWORDS, FeatureThreatsEnum.MONITORING.value),
-            (FEATURE_INTRUDER_KEYWORDS, FeatureThreatsEnum.INTRUDER.value),
-            (FEATURE_INTERCEPTION_KEYWORDS, FeatureThreatsEnum.INTERCEPTION.value),
-            (FEATURE_ENCRYPTION_KEYWORDS, FeatureThreatsEnum.ENCRYPTION.value),
-            (FEATURE_SNIFFER_KEYWORDS, FeatureThreatsEnum.SNIFFER.value),
-            (FEATURE_HACKING_KEYWORDS, FeatureThreatsEnum.HACKING.value),
-            (FEATURE_ATTACKS_KEYWORDS, FeatureThreatsEnum.ATTACK.value),
-            (FEATURE_VIRUS_KEYWORDS, FeatureThreatsEnum.VIRUS.value),
-            (FEATURE_CYBER_KEYWORDS, FeatureThreatsEnum.CYBER.value),
-            (FEATURE_DATA_KEYWORDS, FeatureThreatsEnum.DATA.value)
-        ]
-        return self.__find_value_by_pairs(description, keyword_feature_pairs)
-
-    def __find_value_by_pairs(self, source: str, pairs: list[tuple]) -> str | None:
-        for keywords, target_value in pairs:
-            if not self.__is_part_in_list(source, keywords):
-                continue
-            return target_value
-
-    def __is_part_in_list(self, string: str, words: list) -> bool:
-        for word in words:
-            if word.lower() in string.lower():
-                return True
-        return False
 
     def __fix_many_spaces_with_http_clck(self, string: str) -> str:
         return re.sub(' *https://clck', " https://clck", string)
