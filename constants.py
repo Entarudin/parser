@@ -16,10 +16,10 @@ OUTPUT_FILE = "channel_threats.json"
 
 
 class TypeThreatsEnum(str, Enum):
-    VULNERABILITY_TYPE = 'Уязвимость'
-    ATTACK_TYPE = 'Атака'
-    INCIDENT_TYPE = 'Инцидент'
-    THREAT_TYPE = 'Угроза'
+    VULNERABILITY = 'Уязвимость'
+    ATTACK = 'Атака'
+    INCIDENT = 'Инцидент'
+    THREAT = 'Угроза'
 
 
 class FeatureThreatsEnum(str, Enum):

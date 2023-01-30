@@ -119,13 +119,13 @@ class TelegramScraper:
 
     def _get_type_threat_by_description(self, description: str) -> str:
         if self._is_part_in_list(description, VULNERABILITIES_KEYWORDS):
-            return TypeThreatsEnum.VULNERABILITY_TYPE.value
+            return TypeThreatsEnum.VULNERABILITY.value
         elif self._is_part_in_list(description, ATTACKS_KEYWORDS):
-            return TypeThreatsEnum.ATTACK_TYPE.value
+            return TypeThreatsEnum.ATTACK.value
         elif self._is_part_in_list(description, INCIDENTS_KEYWORDS):
-            return TypeThreatsEnum.INCIDENT_TYPE.value
+            return TypeThreatsEnum.INCIDENT.value
         elif self._is_part_in_list(description, THREATS_KEYWORDS):
-            return TypeThreatsEnum.THREAT_TYPE.value
+            return TypeThreatsEnum.THREAT.value
 
     def _get_feature_threats_by_description(self, description: str) -> str:
         if self._is_part_in_list(description, FEATURE_THREATS_KEYWORDS):
@@ -181,24 +181,16 @@ class TelegramScraper:
 
     def get_statistics_by_type(self, list_threats: list[Threat]) -> StatisticsThreats:
         statistics_threats = StatisticsThreats()
-        summary = len(list_threats)
-        count_vulnerabilities = 0
-        count_attacks = 0
-        count_threats = 0
-        count_incidents = 0
+        statistics_threats.summary = len(list_threats)
+        type_to_number = {
+            TypeThreatsEnum.THREAT.value: 0,
+            TypeThreatsEnum.ATTACK.value: 0,
+            TypeThreatsEnum.INCIDENT.value: 0,
+            TypeThreatsEnum.VULNERABILITY.value: 0
+        }
         for item in list_threats:
-            if item.type == TypeThreatsEnum.THREAT_TYPE.value:
-                count_threats += 1
-            if item.type == TypeThreatsEnum.ATTACK_TYPE.value:
-                count_attacks += 1
-            if item.type == TypeThreatsEnum.INCIDENT_TYPE.value:
-                count_incidents += 1
-            if item.type == TypeThreatsEnum.VULNERABILITY_TYPE:
-                count_vulnerabilities += 1
-        statistics_threats.count_threats = count_threats
-        statistics_threats.summary = summary
-        statistics_threats.count_incidents = count_incidents
-        statistics_threats.count_attacks = count_attacks
-        statistics_threats.count_vulnerabilities = count_vulnerabilities
-
+            if item.type not in type_to_number.keys():
+                continue
+            type_to_number[item.type] += 1
+        statistics_threats.assign_type_to_number(type_to_number)
         return statistics_threats
