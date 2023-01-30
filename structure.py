@@ -2,11 +2,8 @@ from functools import cached_property
 from translators import ListTranslator, ThreatTranslator, StatisticsThreatsTranslator
 from services import ConfigService
 from repositories import ThreatsRepository
-from wrappers import MatplotlibWrapper
+from wrappers import MatplotlibWrapper, TelethonWrapper
 from telegram_scraper import TelegramScraper
-
-# Todo: make wrapper
-from telethon.sync import TelegramClient
 
 
 class Structure:
@@ -24,12 +21,11 @@ class Structure:
 
     @cached_property
     def telegram_client(self):
-        # maybe start inside scraper
-        return TelegramClient(
+        return TelethonWrapper(
             self.telegram_phone,
             self.telegram_api_id,
             self.telegram_api_hash
-        )
+        ).get_client()
 
     @cached_property
     def telegram_scraper(self):

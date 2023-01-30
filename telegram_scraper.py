@@ -31,7 +31,6 @@ from datetime import datetime, timedelta
 class TelegramScraper:
     def __init__(self, client: TelegramClient):
         self.client = client
-        self.client.start()
         self.min_count_coincidences_with_unique_keywords = 2
 
     def scrape_channels(self, channels_names: list[str]) -> list[Threat]:
