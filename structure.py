@@ -1,4 +1,5 @@
 from functools import cached_property
+
 from translators import ListTranslator, ThreatTranslator, StatisticsThreatsTranslator
 from services import ConfigService
 from repositories import ThreatsRepository
