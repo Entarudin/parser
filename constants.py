@@ -39,10 +39,10 @@ class FeatureThreatsEnum(str, Enum):
     VIRUS = "Вирус"
 
 
-FEATURE_ATTACKS_KEYWORDS = ["Атаки", "атака", "атаку", "атаками", "атакой"]
-FEATURE_VULNERABILITIES_KEYWORDS = ["Уязвимости", "уязвимость", "уязвимостью"]
-FEATURE_THREATS_KEYWORDS = ["Угрозы", "угроза", "угрозы", "угрозами"]
-FEATURE_CYBER_KEYWORDS = [
+FEATURE_ATTACKS_KEYWORDS = {"Атаки", "атака", "атаку", "атаками", "атакой"}
+FEATURE_VULNERABILITIES_KEYWORDS = {"Уязвимости", "уязвимость", "уязвимостью"}
+FEATURE_THREATS_KEYWORDS = {"Угрозы", "угроза", "угрозы", "угрозами"}
+FEATURE_CYBER_KEYWORDS = {
     "Кибер",
     "киберсистема",
     "киберфизическая",
@@ -50,68 +50,70 @@ FEATURE_CYBER_KEYWORDS = [
     "кибератака",
     "киберпространоство",
     "киберсталкинг"
-]
-FEATURE_SECURITY_KEYWORDS = ["Безопасность", "безопасности"]
-FEATURE_INTRUDER_KEYWORDS = ["Злоумышленник", "злоумышленники", "злоумышленником"]
-FEATURE_LEAK_INFORMATION_KEYWORDS = ["Утечка", "утечки", "утечками"]
-FEATURE_HACKING_KEYWORDS = ["Взлом"]
-FEATURE_DATA_KEYWORDS = ["Данные", "данных"]
-FEATURE_ENCRYPTION_KEYWORDS = ["Шифрование", "шифр", "шифровальщик"]
-FEATURE_MONITORING_KEYWORDS = ["Мониторинг", "мониторить", "мониторят"]
-FEATURE_SNIFFER_KEYWORDS = ["Снифер", "сниферы", "сниферами"]
-FEATURE_INTERCEPTION_KEYWORDS = ["Перехват", "перехватывают", "перехватили", "перехватить"]
-FEATURE_VIRUS_KEYWORDS = ["Вирус", "вирусы"]
+}
+FEATURE_SECURITY_KEYWORDS = {"Безопасность", "безопасности"}
+FEATURE_INTRUDER_KEYWORDS = {"Злоумышленник", "злоумышленники", "злоумышленником"}
+FEATURE_LEAK_INFORMATION_KEYWORDS = {"Утечка", "утечки", "утечками"}
+FEATURE_HACKING_KEYWORDS = {"Взлом"}
+FEATURE_DATA_KEYWORDS = {"Данные", "данных"}
+FEATURE_ENCRYPTION_KEYWORDS = {"Шифрование", "шифр", "шифровальщик"}
+FEATURE_MONITORING_KEYWORDS = {"Мониторинг", "мониторить", "мониторят"}
+FEATURE_SNIFFER_KEYWORDS = {"Снифер", "сниферы", "сниферами"}
+FEATURE_INTERCEPTION_KEYWORDS = {"Перехват", "перехватывают", "перехватили", "перехватить"}
+FEATURE_VIRUS_KEYWORDS = {"Вирус", "вирусы"}
 
-VULNERABILITIES_KEYWORDS = [
-                               "слабое место",
-                               "слабость",
-                               "недостаток",
-                               "CVE",
-                               "NVD",
-                               "ФСТЭК",
-                               "NIST",
-                               "CVSS",
-                               "уязвимости нулевого дня",
-                               "переполнение буфера",
-                               "эксплойт",
-                               "подделка запросов",
-                               "межсайтовый скриптинг",
-                               "удаленное выполнение кода",
-                               "обратный инжиниринг",
-                               "python",
-                               "XSS-уязвимость",
-                               "IDOR-уязвимость",
-                               "SQL-инъекция",
-                               "брандмауэр",
-                               "эксплуатация"
-                           ] + FEATURE_VULNERABILITIES_KEYWORDS
+VULNERABILITIES_KEYWORDS = {
+    "слабое место",
+    "слабость",
+    "недостаток",
+    "CVE",
+    "NVD",
+    "ФСТЭК",
+    "NIST",
+    "CVSS",
+    "уязвимости нулевого дня",
+    "переполнение буфера",
+    "эксплойт",
+    "подделка запросов",
+    "межсайтовый скриптинг",
+    "удаленное выполнение кода",
+    "обратный инжиниринг",
+    "python",
+    "XSS-уязвимость",
+    "IDOR-уязвимость",
+    "SQL-инъекция",
+    "брандмауэр",
+    "эксплуатация",
+    *FEATURE_VULNERABILITIES_KEYWORDS
+}
 
-ATTACKS_KEYWORDS = [
-                       "CAPEC",
-                       "MITRE",
-                       "ATT&CK",
-                       "ФСТЭК",
-                       "злоумышленник",
-                       "нарушитель",
-                       "хакер",
-                       "жертва",
-                       "пользователь",
-                       "фишинг",
-                       "DDoS",
-                       "DoS",
-                       "Brute-force",
-                       "SQL-инъекция",
-                       "таргетированная атака",
-                       "целевая атака",
-                       "APT",
-                       "сетевая атака",
-                       "шпионское ПО",
-                       "касперский",
-                       "код безопасности",
-                       "InfoWatch",
-                   ] + FEATURE_ATTACKS_KEYWORDS
+ATTACKS_KEYWORDS = {
+    "CAPEC",
+    "MITRE",
+    "ATT&CK",
+    "ФСТЭК",
+    "злоумышленник",
+    "нарушитель",
+    "хакер",
+    "жертва",
+    "пользователь",
+    "фишинг",
+    "DDoS",
+    "DoS",
+    "Brute-force",
+    "SQL-инъекция",
+    "таргетированная атака",
+    "целевая атака",
+    "APT",
+    "сетевая атака",
+    "шпионское ПО",
+    "касперский",
+    "код безопасности",
+    "InfoWatch",
+    *FEATURE_ATTACKS_KEYWORDS
+}
 
-INCIDENTS_KEYWORDS = [
+INCIDENTS_KEYWORDS = {
     "информационная безопасность",
     "касперский",
     "реагирование",
@@ -124,32 +126,71 @@ INCIDENTS_KEYWORDS = [
     "причины",
     "следствие",
     "мошенник",
-]
+}
 
-THREATS_KEYWORDS = [
-                       "ФСТЭК",
-                       "CWE",
-                       "CWSS",
-                       "внутренняя угроза",
-                       "внешняя угроза",
-                       "опасность",
-                       "информационная система",
-                       "автоматизированная система",
-                       "информационные ресурсы",
-                       "искажение",
-                       "несанкционированный",
-                       "модификация",
-                       "разрушение",
-                       "дестабилизация",
-                       "нарушение",
-                       "реализация"
-                   ] + FEATURE_THREATS_KEYWORDS
+THREATS_KEYWORDS = {
+    "ФСТЭК",
+    "CWE",
+    "CWSS",
+    "внутренняя угроза",
+    "внешняя угроза",
+    "опасность",
+    "информационная система",
+    "автоматизированная система",
+    "информационные ресурсы",
+    "искажение",
+    "несанкционированный",
+    "модификация",
+    "разрушение",
+    "дестабилизация",
+    "нарушение",
+    "реализация",
+    *FEATURE_THREATS_KEYWORDS
+}
 
-KEYWORDS = FEATURE_ATTACKS_KEYWORDS + FEATURE_VULNERABILITIES_KEYWORDS + FEATURE_THREATS_KEYWORDS
-KEYWORDS += FEATURE_SECURITY_KEYWORDS + FEATURE_INTRUDER_KEYWORDS + FEATURE_LEAK_INFORMATION_KEYWORDS
-KEYWORDS += FEATURE_HACKING_KEYWORDS + FEATURE_DATA_KEYWORDS + FEATURE_ENCRYPTION_KEYWORDS
-KEYWORDS += FEATURE_MONITORING_KEYWORDS + FEATURE_SNIFFER_KEYWORDS + FEATURE_INTERCEPTION_KEYWORDS
-KEYWORDS += FEATURE_VIRUS_KEYWORDS + VULNERABILITIES_KEYWORDS + ATTACKS_KEYWORDS + INCIDENTS_KEYWORDS
-KEYWORDS += THREATS_KEYWORDS + FEATURE_CYBER_KEYWORDS
+KEYWORDS = {
+    *FEATURE_ATTACKS_KEYWORDS,
+    *FEATURE_VULNERABILITIES_KEYWORDS,
+    *FEATURE_THREATS_KEYWORDS,
+    *FEATURE_SECURITY_KEYWORDS,
+    *FEATURE_INTRUDER_KEYWORDS,
+    *FEATURE_LEAK_INFORMATION_KEYWORDS,
+    *FEATURE_HACKING_KEYWORDS,
+    *FEATURE_DATA_KEYWORDS,
+    *FEATURE_ENCRYPTION_KEYWORDS,
+    *FEATURE_MONITORING_KEYWORDS,
+    *FEATURE_SNIFFER_KEYWORDS,
+    *FEATURE_INTERCEPTION_KEYWORDS,
+    *FEATURE_VIRUS_KEYWORDS,
+    *VULNERABILITIES_KEYWORDS,
+    *ATTACKS_KEYWORDS,
+    *INCIDENTS_KEYWORDS,
+    *THREATS_KEYWORDS,
+    *FEATURE_CYBER_KEYWORDS
+}
 
 UNIQUE_KEYWORDS = list(set(KEYWORDS))
+
+KEYWORD_FEATURE_PAIRS = [
+    (FEATURE_THREATS_KEYWORDS, FeatureThreatsEnum.THREAT.value),
+    (FEATURE_LEAK_INFORMATION_KEYWORDS, FeatureThreatsEnum.LEAK_INFORMATION.value),
+    (FEATURE_VULNERABILITIES_KEYWORDS, FeatureThreatsEnum.VULNERABILITY.value),
+    (FEATURE_SECURITY_KEYWORDS, FeatureThreatsEnum.SECURITY.value),
+    (FEATURE_MONITORING_KEYWORDS, FeatureThreatsEnum.MONITORING.value),
+    (FEATURE_INTRUDER_KEYWORDS, FeatureThreatsEnum.INTRUDER.value),
+    (FEATURE_INTERCEPTION_KEYWORDS, FeatureThreatsEnum.INTERCEPTION.value),
+    (FEATURE_ENCRYPTION_KEYWORDS, FeatureThreatsEnum.ENCRYPTION.value),
+    (FEATURE_SNIFFER_KEYWORDS, FeatureThreatsEnum.SNIFFER.value),
+    (FEATURE_HACKING_KEYWORDS, FeatureThreatsEnum.HACKING.value),
+    (FEATURE_ATTACKS_KEYWORDS, FeatureThreatsEnum.ATTACK.value),
+    (FEATURE_VIRUS_KEYWORDS, FeatureThreatsEnum.VIRUS.value),
+    (FEATURE_CYBER_KEYWORDS, FeatureThreatsEnum.CYBER.value),
+    (FEATURE_DATA_KEYWORDS, FeatureThreatsEnum.DATA.value)
+]
+
+KEYWORD_THREAT_TYPE_PAIRS = [
+    (VULNERABILITIES_KEYWORDS, TypeThreatsEnum.VULNERABILITY.value),
+    (ATTACKS_KEYWORDS, TypeThreatsEnum.ATTACK.value),
+    (INCIDENTS_KEYWORDS, TypeThreatsEnum.INCIDENT.value),
+    (THREATS_KEYWORDS, TypeThreatsEnum.THREAT.value)
+]
