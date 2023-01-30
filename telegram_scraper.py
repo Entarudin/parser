@@ -35,23 +35,61 @@ class TelegramScraper:
 
     def scrape_channels(self, channels_names: list[str]) -> list[Threat]:
         result = []
-        for item in channels_names:
-            print(f'[{datetime.utcnow().isoformat()}][TelegramScraper] - {item} scraping started')
-            result += self.scrape_channel(item)
+        for channel_name in channels_names:
+            result += self.scrape_channel(channel_name)
         return result
 
     def scrape_channel(self, channel_name: str) -> list[Threat]:
-        result = []
+        print(f'[{datetime.utcnow().isoformat()}][TelegramScraper] - {channel_name} scraping started')
+        threats = []
 
         channel_entity = self.client.get_entity(channel_name)
 
         offset_id = 0
         limit = 100
-        total_messages = 0
-        total_count_limit = 0
 
         while True:
-            history_posts = self.client(GetHistoryRequest(
+            history_posts_page = self.__get_history_posts_page(
+                channel_entity,
+                offset_id,
+                limit
+            )
+            if not history_posts_page.messages:
+                break
+            messages = history_posts_page.messages
+            threats += self.__build_threats_from_messages(messages, channel_name)
+            offset_id = messages[len(messages) - 1].id
+        return threats
+    
+    def __build_threats_from_messages(self, messages: list, channel_name: str) -> list[Threat]:
+        threats = []
+        for message in messages:
+            text = str(message.message)
+            half_of_year_days = 180
+            if self._get_difference_in_days(message.date.isoformat()) > half_of_year_days:
+                continue
+            if not self._is_part_in_list_by_unique_keywords(text, UNIQUE_KEYWORDS):
+                continue
+            threat = self.__build_threat(channel_name, message.id, message.message, message.date)
+            if not threat:
+                continue
+            threats.append(threat)
+        return threats
+
+    def __build_threat(self, channel_name, message_id, message_text, message_date) -> Threat | None:
+        threat = Threat()
+        threat.source = self._get_link_on_channel_message(channel_name, message_id)
+        threat.type = self._get_type_threat_by_description(message_text)
+        threat.feature = self._get_feature_threats_by_description(message_text)
+        if not threat.type or not threat.feature:
+            return None
+        threat.description = self._fix_many_spaces_with_http_clck(message_text)
+        threat.date_publication = message_date.isoformat()
+        return threat
+
+    def __get_history_posts_page(self, channel_entity,  offset_id, limit):
+        return self.client(
+            GetHistoryRequest(
                 peer=channel_entity,
                 offset_id=offset_id,
                 offset_date=None,
@@ -60,37 +98,8 @@ class TelegramScraper:
                 max_id=0,
                 min_id=0,
                 hash=0
-            ))
-
-            if not history_posts.messages:
-                break
-
-            messages = history_posts.messages
-
-            for message in messages:
-                difference_in_days_between_iso_dates = self._get_difference_in_days(message.date.isoformat())
-                check_actual_date_publication = 0 < difference_in_days_between_iso_dates < 180
-                check_message = self._is_part_in_list_by_unique_keywords(str(message.message), UNIQUE_KEYWORDS) \
-                    and check_actual_date_publication
-
-                if check_message:
-                    message_id = message.id
-                    threat = Threat()
-                    threat.source = self._get_link_on_channel_message(channel_name, message_id)
-                    threat.type = self._get_type_threat_by_description(message.message)
-                    threat.feature = self._get_feature_threats_by_description(message.message)
-                    threat.description = self._fix_many_spaces_with_http_clck(message.message)
-                    threat.date_publication = message.date.isoformat()
-                
-                    if threat.feature and threat.type:
-                        result.append(threat)
-
-            offset_id = messages[len(messages) - 1].id
-
-            if total_count_limit != 0 and total_messages >= total_count_limit:
-                break
-
-        return result
+            )
+        )
 
     def _get_link_on_channel_message(self, channel_name: str, message_id: int) -> str:
         return f"https://t.me/{channel_name}/{message_id}"
