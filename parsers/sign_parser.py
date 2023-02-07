@@ -1,5 +1,3 @@
-import re
-
 from constants import (
     FIELD_TYPE,
     FIELD_DATABASE_IDENTIFIERS
