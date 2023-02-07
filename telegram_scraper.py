@@ -1,25 +1,23 @@
 from telethon.sync import TelegramClient
 from telethon.tl.functions.messages import GetHistoryRequest
-from sign_parser import SignParser
-from constants import (
-    UNIQUE_KEYWORDS,
-    TypeThreatsEnum,
-)
-from models import Threat, StatisticsThreats
-import re
 from datetime import datetime, timedelta
+import re
+
+from parsers.sign_parser import SignParser
+from constants import UNIQUE_KEYWORDS, TypeThreatsEnum
+from models import Threat, StatisticsThreats
 
 
 class TelegramScraper:
     def __init__(
             self,
             client: TelegramClient,
-            feature_parser: SignParser,
+            database_identifiers_parser: SignParser,
             threat_type_parser: SignParser,
     ):
         self.client = client
         self.min_count_coincidences_with_unique_keywords = 2
-        self.feature_parser = feature_parser
+        self.database_identifiers_parser = database_identifiers_parser
         self.threat_type_parser = threat_type_parser
 
     def scrape_channels(self, channels_names: list[str]) -> list[Threat]:
@@ -83,9 +81,7 @@ class TelegramScraper:
         threat.type = self.threat_type_parser.parse(message_text)
         if not threat.type:
             return None
-        threat.feature = self.feature_parser.parse(message_text)
-        if not threat.feature:
-            return None
+        threat.database_identifiers = self.database_identifiers_parser.parse(message_text)
         threat.source = self.__build_message_url(channel_name, message_id)
         threat.description = self.__fix_many_spaces_with_http_clck(message_text)
         threat.date_publication = message_date.isoformat()
@@ -111,15 +107,18 @@ class TelegramScraper:
         return timedelta(seconds=delta_seconds).days
 
     def __get_history_posts_page(self, channel_entity, offset_id, limit):
-        return self.client(
-            GetHistoryRequest(
-                peer=channel_entity,
-                offset_id=offset_id,
-                offset_date=None,
-                add_offset=0,
-                limit=limit,
-                max_id=0,
-                min_id=0,
-                hash=0
+        try:
+            return self.client(
+                GetHistoryRequest(
+                    peer=channel_entity,
+                    offset_id=offset_id,
+                    offset_date=None,
+                    add_offset=0,
+                    limit=limit,
+                    max_id=0,
+                    min_id=0,
+                    hash=0
+                )
             )
-        )
+        except Exception as ex:
+            print(str(ex))
