@@ -3,7 +3,7 @@ from telethon.tl.functions.messages import GetHistoryRequest
 from datetime import datetime, timedelta
 import re
 
-from parsers.sign_parser import SignParser
+from parsers import ThreatTypeParser, DatabaseIdentifiersParser
 from constants import UNIQUE_KEYWORDS, TypeThreatsEnum
 from models import Threat, StatisticsThreats
 
@@ -12,8 +12,8 @@ class TelegramScraper:
     def __init__(
             self,
             client: TelegramClient,
-            database_identifiers_parser: SignParser,
-            threat_type_parser: SignParser,
+            database_identifiers_parser: DatabaseIdentifiersParser,
+            threat_type_parser: ThreatTypeParser,
     ):
         self.client = client
         self.min_count_coincidences_with_unique_keywords = 2

@@ -12,17 +12,13 @@ from wrappers import (
     TelethonWrapper
 )
 from telegram_scraper import TelegramScraper
-from constants import (
-    KEYWORD_DATABASE_IDENTIFIERS_PAIRS,
-    KEYWORD_THREAT_TYPE_PAIRS,
-    FIELD_TYPE,
-    FIELD_DATABASE_IDENTIFIERS
-)
+from constants import KEYWORD_THREAT_TYPE_PAIRS
 from parsers import (
     CWEParser,
     CVEParser,
     BduFSTECParser,
-    SignParser
+    DatabaseIdentifiersParser,
+    ThreatTypeParser
 )
 
 
@@ -57,9 +53,7 @@ class Structure:
 
     @cached_property
     def database_identifiers_parser(self):
-        return SignParser(
-            KEYWORD_DATABASE_IDENTIFIERS_PAIRS,
-            FIELD_DATABASE_IDENTIFIERS,
+        return DatabaseIdentifiersParser(
             [
                 self.bdu_fsctec_parser,
                 self.cve_parser,
@@ -69,15 +63,7 @@ class Structure:
 
     @cached_property
     def threat_type_parser(self):
-        return SignParser(
-            KEYWORD_THREAT_TYPE_PAIRS,
-            FIELD_TYPE,
-            [
-                self.bdu_fsctec_parser,
-                self.cve_parser,
-                self.cwe_parser
-            ]
-        )
+        return ThreatTypeParser(KEYWORD_THREAT_TYPE_PAIRS)
 
     @cached_property
     def config_service(self):

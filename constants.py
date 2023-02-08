@@ -533,5 +533,3 @@ KEYWORD_THREAT_TYPE_PAIRS = [
     (THREATS_KEYWORDS, TypeThreatsEnum.THREAT.value)
 ]
 
-FIELD_TYPE = 'type'
-FIELD_DATABASE_IDENTIFIERS = 'database_identifiers'
