@@ -1,12 +1,25 @@
 from functools import cached_property
 
-from translators import ListTranslator, ThreatTranslator, StatisticsThreatsTranslator
+from translators import (
+    ListTranslator,
+    ThreatTranslator,
+    StatisticsThreatsTranslator
+)
 from services import ConfigService
 from repositories import ThreatsRepository
-from wrappers import MatplotlibWrapper, TelethonWrapper
+from wrappers import (
+    MatplotlibWrapper,
+    TelethonWrapper
+)
 from telegram_scraper import TelegramScraper
-from sign_parser import SignParser
-from constants import KEYWORD_FEATURE_PAIRS, KEYWORD_THREAT_TYPE_PAIRS
+from constants import KEYWORD_THREAT_TYPE_PAIRS
+from parsers import (
+    CWEParser,
+    CVEParser,
+    BduFSTECParser,
+    DatabaseIdentifiersParser,
+    ThreatTypeParser
+)
 
 
 class Structure:
@@ -34,17 +47,23 @@ class Structure:
     def telegram_scraper(self):
         return TelegramScraper(
             self.telegram_client,
-            self.feature_parser,
+            self.database_identifiers_parser,
             self.threat_type_parser
         )
 
     @cached_property
-    def feature_parser(self):
-        return SignParser(KEYWORD_FEATURE_PAIRS)
+    def database_identifiers_parser(self):
+        return DatabaseIdentifiersParser(
+            [
+                self.bdu_fsctec_parser,
+                self.cve_parser,
+                self.cwe_parser
+            ]
+        )
 
     @cached_property
     def threat_type_parser(self):
-        return SignParser(KEYWORD_THREAT_TYPE_PAIRS)
+        return ThreatTypeParser(KEYWORD_THREAT_TYPE_PAIRS)
 
     @cached_property
     def config_service(self):
@@ -72,6 +91,18 @@ class Structure:
     @cached_property
     def matplotlib_wrapper(self):
         return MatplotlibWrapper()
+
+    @cached_property
+    def cve_parser(self):
+        return CVEParser()
+
+    @cached_property
+    def cwe_parser(self):
+        return CWEParser()
+
+    @cached_property
+    def bdu_fsctec_parser(self):
+        return BduFSTECParser()
 
 
 structure = Structure()

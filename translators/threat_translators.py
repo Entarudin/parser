@@ -6,7 +6,7 @@ class ThreatTranslator:
         return {
             "source": model.source,
             "type": model.type,
-            "feature": model.feature,
+            "database_identifiers": model.database_identifiers,
             "description": model.description,
             "date_publication": model.date_publication
         }
