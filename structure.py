@@ -18,7 +18,8 @@ from parsers import (
     CVEParser,
     BduFSTECParser,
     DatabaseIdentifiersParser,
-    ThreatTypeParser
+    ThreatTypeParser,
+    ThreatTitleParser
 )
 
 
@@ -48,7 +49,8 @@ class Structure:
         return TelegramScraper(
             self.telegram_client,
             self.database_identifiers_parser,
-            self.threat_type_parser
+            self.threat_type_parser,
+            self.threat_title_parser
         )
 
     @cached_property
@@ -64,6 +66,10 @@ class Structure:
     @cached_property
     def threat_type_parser(self):
         return ThreatTypeParser(KEYWORD_THREAT_TYPE_PAIRS)
+
+    @cached_property
+    def threat_title_parser(self):
+        return ThreatTitleParser()
 
     @cached_property
     def config_service(self):

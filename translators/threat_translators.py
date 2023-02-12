@@ -7,6 +7,7 @@ class ThreatTranslator:
             "source": model.source,
             "type": model.type,
             "database_identifiers": model.database_identifiers,
+            "title": model.title,
             "description": model.description,
             "date_publication": model.date_publication
         }

@@ -3,7 +3,7 @@ from telethon.tl.functions.messages import GetHistoryRequest
 from datetime import datetime, timedelta
 import re
 
-from parsers import ThreatTypeParser, DatabaseIdentifiersParser
+from parsers import ThreatTypeParser, DatabaseIdentifiersParser, ThreatTitleParser
 from constants import UNIQUE_KEYWORDS, TypeThreatsEnum
 from models import Threat, StatisticsThreats
 
@@ -14,11 +14,13 @@ class TelegramScraper:
             client: TelegramClient,
             database_identifiers_parser: DatabaseIdentifiersParser,
             threat_type_parser: ThreatTypeParser,
+            threat_title_parser: ThreatTitleParser
     ):
         self.client = client
         self.min_count_coincidences_with_unique_keywords = 2
         self.database_identifiers_parser = database_identifiers_parser
         self.threat_type_parser = threat_type_parser
+        self.threat_title_parser = threat_title_parser
 
     def scrape_channels(self, channels_names: list[str]) -> list[Threat]:
         result = []
@@ -82,6 +84,7 @@ class TelegramScraper:
         if not threat.type:
             return None
         threat.database_identifiers = self.database_identifiers_parser.parse(message_text)
+        threat.title = self.threat_title_parser.parse(message_text)
         threat.source = self.__build_message_url(channel_name, message_id)
         threat.description = self.__fix_many_spaces_with_http_clck(message_text)
         threat.date_publication = message_date.isoformat()

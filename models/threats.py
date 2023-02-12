@@ -8,3 +8,4 @@ class Threat:
         self.date_publication: Optional[str] = None
         self.description: Optional[str] = None
         self.database_identifiers: Optional[list[str]] = None
+        self.title: Optional[str] = None
