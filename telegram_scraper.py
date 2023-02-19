@@ -72,10 +72,10 @@ class TelegramScraper:
                 continue
             if not self.__is_part_in_list_by_unique_keywords(text, UNIQUE_KEYWORDS):
                 continue
-            exposures = self.__build_exposure(channel_name, message.id, message.message, message.date)
-            if not exposures:
+            exposure = self.__build_exposure(channel_name, message.id, message.message, message.date)
+            if not exposure:
                 continue
-            exposures.append(exposures)
+            exposures.append(exposure)
         return exposures
 
     def __build_exposure(self, channel_name, message_id, message_text, message_date) -> Exposure | None:
