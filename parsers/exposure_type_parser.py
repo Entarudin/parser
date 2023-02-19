@@ -1,4 +1,4 @@
-class ThreatTypeParser:
+class ExposureTypeParser:
     def __init__(self, keyword_to_sign_pairs: list[tuple[set[str], str]]):
         self.__keyword_to_sign_pairs = keyword_to_sign_pairs
 

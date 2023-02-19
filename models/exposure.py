@@ -1,7 +1,7 @@
 from typing import Optional
 
 
-class Threat:
+class Exposure:
     def __init__(self):
         self.source: Optional[str] = None
         self.type: Optional[str] = None

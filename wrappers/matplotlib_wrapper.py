@@ -1,20 +1,20 @@
 from time import time
 from hashlib import md5
 import matplotlib.pyplot as plt
-from models import StatisticsThreats
-from constants import TypeThreatsEnum
+from models import StatisticsExposures
+from constants import TypeExposuresEnum
 
 
 class MatplotlibWrapper:
-    def get_statisctics_chart(self, statistics: StatisticsThreats) -> tuple:
+    def get_statisctics_chart(self, statistics: StatisticsExposures) -> tuple:
         img_id = md5(str('statistisc' + str(time())).encode()).hexdigest()
         filename = f'images/{img_id}.png'
 
         labels = [
-            TypeThreatsEnum.THREAT.value,
-            TypeThreatsEnum.VULNERABILITY.value,
-            TypeThreatsEnum.INCIDENT.value,
-            TypeThreatsEnum.ATTACK.value
+            TypeExposuresEnum.THREAT.value,
+            TypeExposuresEnum.VULNERABILITY.value,
+            TypeExposuresEnum.INCIDENT.value,
+            TypeExposuresEnum.ATTACK.value
         ]
         values = [
             statistics.count_threats,

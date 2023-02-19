@@ -36,17 +36,17 @@ CHANNELS_NAMES = [
     "cibsecurity"
 ]
 
-OUTPUT_FILE = "channel_threats.json"
+OUTPUT_FILE = "channel_exposures.json"
 
 
-class TypeThreatsEnum(str, Enum):
+class TypeExposuresEnum(str, Enum):
     VULNERABILITY = 'Уязвимость'
     ATTACK = 'Атака'
     INCIDENT = 'Инцидент'
     THREAT = 'Угроза'
 
 
-class DatabaseIdentifiersThreatsEnum(str, Enum):
+class DatabaseIdentifiersExposuresEnum(str, Enum):
     VULNERABILITY = 'Уязвимость'
     THREAT = 'Угроза'
 
@@ -66,7 +66,7 @@ DATABASE_IDENTIFIERS_VULNERABILITIES_KEYWORDS = {
     "MITRE"
 }
 
-DATABASE_IDENTIFIERS_THREATS_KEYWORDS = {"ФСТЭК", "SecurityLab"}
+DATABASE_IDENTIFIERS_EXPOSURE_KEYWORDS = {"ФСТЭК", "SecurityLab"}
 
 VULNERABILITIES_KEYWORDS = {
     "Уязвимости",
@@ -512,7 +512,7 @@ THREATS_KEYWORDS = {
 
 KEYWORDS = {
     *DATABASE_IDENTIFIERS_VULNERABILITIES_KEYWORDS,
-    *DATABASE_IDENTIFIERS_THREATS_KEYWORDS,
+    *DATABASE_IDENTIFIERS_EXPOSURE_KEYWORDS,
     *VULNERABILITIES_KEYWORDS,
     *ATTACKS_KEYWORDS,
     *INCIDENTS_KEYWORDS,
@@ -522,14 +522,14 @@ KEYWORDS = {
 UNIQUE_KEYWORDS = list(set(KEYWORDS))
 
 KEYWORD_DATABASE_IDENTIFIERS_PAIRS = [
-    (DATABASE_IDENTIFIERS_THREATS_KEYWORDS, DatabaseIdentifiersThreatsEnum.THREAT.value),
-    (DATABASE_IDENTIFIERS_VULNERABILITIES_KEYWORDS, DatabaseIdentifiersThreatsEnum.VULNERABILITY.value),
+    (DATABASE_IDENTIFIERS_EXPOSURE_KEYWORDS, DatabaseIdentifiersExposuresEnum.THREAT.value),
+    (DATABASE_IDENTIFIERS_VULNERABILITIES_KEYWORDS, DatabaseIdentifiersExposuresEnum.VULNERABILITY.value),
 ]
 
-KEYWORD_THREAT_TYPE_PAIRS = [
-    (VULNERABILITIES_KEYWORDS, TypeThreatsEnum.VULNERABILITY.value),
-    (ATTACKS_KEYWORDS, TypeThreatsEnum.ATTACK.value),
-    (INCIDENTS_KEYWORDS, TypeThreatsEnum.INCIDENT.value),
-    (THREATS_KEYWORDS, TypeThreatsEnum.THREAT.value)
+KEYWORD_EXPOSURE_TYPE_PAIRS = [
+    (VULNERABILITIES_KEYWORDS, TypeExposuresEnum.VULNERABILITY.value),
+    (ATTACKS_KEYWORDS, TypeExposuresEnum.ATTACK.value),
+    (INCIDENTS_KEYWORDS, TypeExposuresEnum.INCIDENT.value),
+    (THREATS_KEYWORDS, TypeExposuresEnum.THREAT.value)
 ]
 

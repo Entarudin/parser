@@ -1,8 +1,8 @@
-from models import Threat
+from models import Exposure
 
 
-class ThreatTranslator:
-    def to_dict(self, model: Threat) -> dict:
+class ExposureTranslator:
+    def to_dict(self, model: Exposure) -> dict:
         return {
             "source": model.source,
             "type": model.type,

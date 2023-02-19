@@ -1,8 +1,8 @@
-from models import StatisticsThreats
+from models import StatisticsExposures
 
 
-class StatisticsThreatsTranslator:
-    def to_dict(self, model: StatisticsThreats) -> dict:
+class StatisticsExposuresTranslator:
+    def to_dict(self, model: StatisticsExposures) -> dict:
         return {
             "summary": model.summary,
             "count_vulnerabilities": model.count_vulnerabilities,

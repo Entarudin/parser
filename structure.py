@@ -2,24 +2,24 @@ from functools import cached_property
 
 from translators import (
     ListTranslator,
-    ThreatTranslator,
-    StatisticsThreatsTranslator
+    ExposureTranslator,
+    StatisticsExposuresTranslator
 )
 from services import ConfigService
-from repositories import ThreatsRepository
+from repositories import ExposuresRepository
 from wrappers import (
     MatplotlibWrapper,
     TelethonWrapper
 )
 from telegram_scraper import TelegramScraper
-from constants import KEYWORD_THREAT_TYPE_PAIRS
+from constants import KEYWORD_EXPOSURE_TYPE_PAIRS
 from parsers import (
     CWEParser,
     CVEParser,
     BduFSTECParser,
     DatabaseIdentifiersParser,
-    ThreatTypeParser,
-    ThreatTitleParser
+    ExposureTypeParser,
+    ExposureTitleParser
 )
 
 
@@ -49,8 +49,8 @@ class Structure:
         return TelegramScraper(
             self.telegram_client,
             self.database_identifiers_parser,
-            self.threat_type_parser,
-            self.threat_title_parser
+            self.exposure_type_parser,
+            self.exposure_title_parser
         )
 
     @cached_property
@@ -64,34 +64,34 @@ class Structure:
         )
 
     @cached_property
-    def threat_type_parser(self):
-        return ThreatTypeParser(KEYWORD_THREAT_TYPE_PAIRS)
+    def exposure_type_parser(self):
+        return ExposureTypeParser(KEYWORD_EXPOSURE_TYPE_PAIRS)
 
     @cached_property
-    def threat_title_parser(self):
-        return ThreatTitleParser()
+    def exposure_title_parser(self):
+        return ExposureTitleParser()
 
     @cached_property
     def config_service(self):
         return ConfigService()
 
     @cached_property
-    def threat_translator(self):
-        return ThreatTranslator()
+    def exposure_translator(self):
+        return ExposureTranslator()
 
     @cached_property
-    def threats_translator(self):
-        return ListTranslator(self.threat_translator)
+    def exposures_translator(self):
+        return ListTranslator(self.exposure_translator)
 
     @cached_property
-    def statistics_threats_translator(self):
-        return StatisticsThreatsTranslator()
+    def statistics_exposures_translator(self):
+        return StatisticsExposuresTranslator()
 
     @cached_property
-    def threats_repository(self):
-        return ThreatsRepository(
-            self.threats_translator,
-            self.statistics_threats_translator
+    def exposures_repository(self):
+        return ExposuresRepository(
+            self.exposures_translator,
+            self.statistics_exposures_translator
         )
 
     @cached_property

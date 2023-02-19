@@ -1,1 +1,1 @@
-from .threats_repository import ThreatsRepository
+from .exposures_repository import ExposuresRepository

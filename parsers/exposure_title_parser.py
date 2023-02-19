@@ -1,7 +1,7 @@
 import re
 
 
-class ThreatTitleParser:
+class ExposureTitleParser:
     def __init__(self):
         self.pattern = re.compile(
             "["
