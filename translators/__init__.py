@@ -1,3 +1,3 @@
 from .list_transaltor import ListTranslator
-from .threat_translators import ThreatTranslator
-from .statistics_threats_translator import StatisticsThreatsTranslator
+from .exposure_translator import ExposureTranslator
+from .statistics_exposures_translator import StatisticsExposuresTranslator

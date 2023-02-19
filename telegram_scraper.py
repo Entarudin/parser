@@ -3,9 +3,9 @@ from telethon.tl.functions.messages import GetHistoryRequest
 from datetime import datetime, timedelta
 import re
 
-from parsers import ThreatTypeParser, DatabaseIdentifiersParser, ThreatTitleParser
-from constants import UNIQUE_KEYWORDS, TypeThreatsEnum
-from models import Threat, StatisticsThreats
+from parsers import ExposureTypeParser, DatabaseIdentifiersParser, ExposureTitleParser
+from constants import UNIQUE_KEYWORDS, TypeExposuresEnum
+from models import Exposure, StatisticsExposures
 
 
 class TelegramScraper:
@@ -13,27 +13,27 @@ class TelegramScraper:
             self,
             client: TelegramClient,
             database_identifiers_parser: DatabaseIdentifiersParser,
-            threat_type_parser: ThreatTypeParser,
-            threat_title_parser: ThreatTitleParser
+            exposure_type_parser: ExposureTypeParser,
+            exposure_title_parser: ExposureTitleParser
     ):
         self.client = client
         self.min_count_coincidences_with_unique_keywords = 2
         self.database_identifiers_parser = database_identifiers_parser
-        self.threat_type_parser = threat_type_parser
-        self.threat_title_parser = threat_title_parser
+        self.exposure_type_parser = exposure_type_parser
+        self.exposure_title_parser = exposure_title_parser
 
-    def scrape_channels(self, channels_names: list[str]) -> list[Threat]:
+    def scrape_channels(self, channels_names: list[str]) -> list[Exposure]:
         result = []
         for channel_name in channels_names:
             result += self.scrape_channel(channel_name)
         return result
 
-    def scrape_channel(self, channel_name: str) -> list[Threat]:
+    def scrape_channel(self, channel_name: str) -> list[Exposure]:
         print(f'[{datetime.utcnow().isoformat()}][TelegramScraper] - {channel_name} scraping started')
         channel_entity = self.client.get_entity(channel_name)
         offset_id = 0
         limit = 100
-        threats = []
+        exposures = []
         while True:
             history_posts_page = self.__get_history_posts_page(
                 channel_entity,
@@ -43,28 +43,28 @@ class TelegramScraper:
             if not history_posts_page.messages:
                 break
             messages = history_posts_page.messages
-            threats += self.__build_threats_from_messages(messages, channel_name)
+            exposures += self.__build_exposures_from_messages(messages, channel_name)
             offset_id = messages[len(messages) - 1].id
-        return threats
+        return exposures
 
-    def get_statistics_by_type(self, list_threats: list[Threat]) -> StatisticsThreats:
-        statistics_threats = StatisticsThreats()
-        statistics_threats.summary = len(list_threats)
+    def get_statistics_by_type(self, exposures: list[Exposure]) -> StatisticsExposures:
+        statistics_exposures = StatisticsExposures()
+        statistics_exposures.summary = len(exposures)
         type_to_number = {
-            TypeThreatsEnum.THREAT.value: 0,
-            TypeThreatsEnum.ATTACK.value: 0,
-            TypeThreatsEnum.INCIDENT.value: 0,
-            TypeThreatsEnum.VULNERABILITY.value: 0
+            TypeExposuresEnum.THREAT.value: 0,
+            TypeExposuresEnum.ATTACK.value: 0,
+            TypeExposuresEnum.INCIDENT.value: 0,
+            TypeExposuresEnum.VULNERABILITY.value: 0
         }
-        for item in list_threats:
+        for item in exposures:
             if item.type not in type_to_number.keys():
                 continue
             type_to_number[item.type] += 1
-        statistics_threats.assign_type_to_number(type_to_number)
-        return statistics_threats
+        statistics_exposures.assign_type_to_number(type_to_number)
+        return statistics_exposures
 
-    def __build_threats_from_messages(self, messages: list, channel_name: str) -> list[Threat]:
-        threats = []
+    def __build_exposures_from_messages(self, messages: list, channel_name: str) -> list[Exposure]:
+        exposures = []
         for message in messages:
             text = str(message.message)
             half_of_year_days = 180
@@ -72,23 +72,23 @@ class TelegramScraper:
                 continue
             if not self.__is_part_in_list_by_unique_keywords(text, UNIQUE_KEYWORDS):
                 continue
-            threat = self.__build_threat(channel_name, message.id, message.message, message.date)
-            if not threat:
+            exposure = self.__build_exposure(channel_name, message.id, message.message, message.date)
+            if not exposure:
                 continue
-            threats.append(threat)
-        return threats
+            exposures.append(exposure)
+        return exposures
 
-    def __build_threat(self, channel_name, message_id, message_text, message_date) -> Threat | None:
-        threat = Threat()
-        threat.type = self.threat_type_parser.parse(message_text)
-        if not threat.type:
+    def __build_exposure(self, channel_name, message_id, message_text, message_date) -> Exposure | None:
+        exposure = Exposure()
+        exposure.type = self.exposure_type_parser.parse(message_text)
+        if not exposure.type:
             return None
-        threat.database_identifiers = self.database_identifiers_parser.parse(message_text)
-        threat.title = self.threat_title_parser.parse(message_text)
-        threat.source = self.__build_message_url(channel_name, message_id)
-        threat.description = self.__fix_many_spaces_with_http_clck(message_text)
-        threat.date_publication = message_date.isoformat()
-        return threat
+        exposure.database_identifiers = self.database_identifiers_parser.parse(message_text)
+        exposure.title = self.exposure_title_parser.parse(message_text)
+        exposure.source = self.__build_message_url(channel_name, message_id)
+        exposure.description = self.__fix_many_spaces_with_http_clck(message_text)
+        exposure.date_publication = message_date.isoformat()
+        return exposure
 
     def __build_message_url(self, channel_name: str, message_id: int) -> str:
         return f"https://t.me/{channel_name}/{message_id}"
