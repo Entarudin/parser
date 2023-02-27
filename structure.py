@@ -19,7 +19,13 @@ from parsers import (
     BduFSTECParser,
     DatabaseIdentifiersParser,
     ExposureTypeParser,
-    ExposureTitleParser
+    ExposureTitleParser,
+    CapecParser,
+    CirclParser,
+    ExploitDatabaseParser,
+    MitreParser,
+    SecurityFocusParser,
+    SecurityLabParser
 )
 
 
@@ -59,7 +65,13 @@ class Structure:
             [
                 self.bdu_fsctec_parser,
                 self.cve_parser,
-                self.cwe_parser
+                self.cwe_parser,
+                self.capec_parser,
+                self.circle_parser,
+                self.exploit_database_parser,
+                self.mitre_parser,
+                self.security_focus_parser,
+                self.security_lab_parser
             ]
         )
 
@@ -109,6 +121,30 @@ class Structure:
     @cached_property
     def bdu_fsctec_parser(self):
         return BduFSTECParser()
+
+    @cached_property
+    def capec_parser(self):
+        return CapecParser()
+
+    @cached_property
+    def circle_parser(self):
+        return CirclParser()
+
+    @cached_property
+    def exploit_database_parser(self):
+        return ExploitDatabaseParser()
+
+    @cached_property
+    def mitre_parser(self):
+        return MitreParser()
+
+    @cached_property
+    def security_focus_parser(self):
+        return SecurityFocusParser()
+
+    @cached_property
+    def security_lab_parser(self):
+        return SecurityLabParser()
 
 
 structure = Structure()
