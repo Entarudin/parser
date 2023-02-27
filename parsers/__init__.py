@@ -4,3 +4,9 @@ from .cwe_parser import CWEParser
 from .exposure_type_parser import ExposureTypeParser
 from .database_identifiers_parser import DatabaseIdentifiersParser
 from .exposure_title_parser import ExposureTitleParser
+from .capec_parser import CapecParser
+from .circl_parser import CirclParser
+from .exploit_database_parser import ExploitDatabaseParser
+from .mitre_parser import MitreParser
+from .security_focus_parser import SecurityFocusParser
+from .security_lab_parser import SecurityLabParser
