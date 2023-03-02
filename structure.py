@@ -11,8 +11,8 @@ from wrappers import (
     MatplotlibWrapper,
     TelethonWrapper
 )
-from scrapers import TelegramScraper
-from constants import KEYWORD_EXPOSURE_TYPE_PAIRS
+from scrapers import TelegramScraper, RiaNewsScraper
+from constants import KEYWORD_EXPOSURE_TYPE_PAIRS, BASE_URL_RIA_NEWS
 from parsers import (
     CWEParser,
     CVEParser,
@@ -54,6 +54,15 @@ class Structure:
     def telegram_scraper(self):
         return TelegramScraper(
             self.telegram_client,
+            self.database_identifiers_parser,
+            self.exposure_type_parser,
+            self.exposure_title_parser
+        )
+
+    @cached_property
+    def ria_news_scraper(self):
+        return RiaNewsScraper(
+            BASE_URL_RIA_NEWS,
             self.database_identifiers_parser,
             self.exposure_type_parser,
             self.exposure_title_parser
