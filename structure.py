@@ -11,7 +11,7 @@ from wrappers import (
     MatplotlibWrapper,
     TelethonWrapper
 )
-from telegram_scraper import TelegramScraper
+from scrapers import TelegramScraper
 from constants import KEYWORD_EXPOSURE_TYPE_PAIRS
 from parsers import (
     CWEParser,
