@@ -510,3 +510,8 @@ KEYWORD_EXPOSURE_TYPE_PAIRS = [
     (THREATS_KEYWORDS, TypeExposuresEnum.THREAT.value)
 ]
 
+BASE_URL_RIA_NEWS = "https://ria.ru"
+
+RIA_NEWS_KEYWORDS = {
+    "keyword_khakery"
+}

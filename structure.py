@@ -11,8 +11,14 @@ from wrappers import (
     MatplotlibWrapper,
     TelethonWrapper
 )
-from telegram_scraper import TelegramScraper
-from constants import KEYWORD_EXPOSURE_TYPE_PAIRS
+from scrapers import (
+    TelegramScraper,
+    RiaNewsScraper
+)
+from constants import (
+    KEYWORD_EXPOSURE_TYPE_PAIRS,
+    BASE_URL_RIA_NEWS
+)
 from parsers import (
     CWEParser,
     CVEParser,
@@ -26,6 +32,11 @@ from parsers import (
     MitreParser,
     SecurityFocusParser,
     SecurityLabParser
+)
+from extractors import (
+    RiaNewsDatePublicationExtractor,
+    RiaNewsDescriptionExtractor,
+    RiaNewsTitleExtractor
 )
 
 
@@ -57,6 +68,17 @@ class Structure:
             self.database_identifiers_parser,
             self.exposure_type_parser,
             self.exposure_title_parser
+        )
+
+    @cached_property
+    def ria_news_scraper(self):
+        return RiaNewsScraper(
+            BASE_URL_RIA_NEWS,
+            self.database_identifiers_parser,
+            self.exposure_type_parser,
+            self.ria_news_date_publication_extractor,
+            self.ria_news_title_extractor,
+            self.ria_news_description_extractor
         )
 
     @cached_property
@@ -145,6 +167,18 @@ class Structure:
     @cached_property
     def security_lab_parser(self):
         return SecurityLabParser()
+
+    @cached_property
+    def ria_news_date_publication_extractor(self):
+        return RiaNewsDatePublicationExtractor()
+
+    @cached_property
+    def ria_news_description_extractor(self):
+        return RiaNewsDescriptionExtractor()
+
+    @cached_property
+    def ria_news_title_extractor(self):
+        return RiaNewsTitleExtractor()
 
 
 structure = Structure()
