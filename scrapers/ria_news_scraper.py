@@ -4,7 +4,15 @@ from time import sleep
 from datetime import datetime
 
 from models import Exposure
-from parsers import DatabaseIdentifiersParser, ExposureTypeParser, ExposureTitleParser
+from parsers import (
+    DatabaseIdentifiersParser,
+    ExposureTypeParser
+)
+from extractors import (
+    RiaNewsDatePublicationExtractor,
+    RiaNewsTitleExtractor,
+    RiaNewsDescriptionExtractor
+)
 
 
 class RiaNewsScraper:
@@ -13,12 +21,16 @@ class RiaNewsScraper:
             base_url: str,
             database_identifiers_parser: DatabaseIdentifiersParser,
             exposure_type_parser: ExposureTypeParser,
-            exposure_title_parser: ExposureTitleParser
+            ria_news_date_publication_extractor: RiaNewsDatePublicationExtractor,
+            ria_news_title_extractor: RiaNewsTitleExtractor,
+            ria_news_description_extractor: RiaNewsDescriptionExtractor
     ):
         self.base_url = base_url
         self.database_identifiers_parser = database_identifiers_parser
         self.exposure_type_parser = exposure_type_parser
-        self.exposure_title_parser = exposure_title_parser
+        self.ria_news_date_publication_extractor = ria_news_date_publication_extractor
+        self.ria_news_title_extractor = ria_news_title_extractor
+        self.ria_news_description_extractor = ria_news_description_extractor
 
     def scrape(self, keyword: str):
         url = f"{self.base_url}/{keyword}/"
@@ -31,13 +43,13 @@ class RiaNewsScraper:
         for news_url in news_urls:
             print(f'[{datetime.utcnow().isoformat()}][RiaNewsScraper] - {news_url} scraping started')
             soup = self.__get_soup_by_request(news_url)
-            date_publication_news = self.__get_date_publication(soup)
+            date_publication_news = self.ria_news_date_publication_extractor.extract(soup)
             if not date_publication_news:
                 continue
-            description_news = self.__get_description_news(soup)
+            description_news = self.ria_news_description_extractor.extract(soup)
             if not description_news:
                 continue
-            title_news = self.__get_title_news(soup)
+            title_news = self.ria_news_title_extractor.extract(soup)
             if not title_news:
                 continue
             exposure = self.__build_exposure(
@@ -68,33 +80,6 @@ class RiaNewsScraper:
         exposure.description = description
         exposure.date_publication = date_publication
         return exposure
-
-    def __get_date_publication(self, soup: BeautifulSoup) -> str:
-        article_date = soup.find("div", class_="article__info-date").find("a").getText()
-        article_date_datetime = datetime.strptime(article_date, "%H:%M %d.%m.%Y")
-        return datetime.isoformat(article_date_datetime)
-
-    def __get_description_news(self, soup: BeautifulSoup) -> str:
-        article_text_chunks = []
-        list_article_blocks = soup.findAll("div", class_="article__block")
-        for item in list_article_blocks:
-            article_text = item.find("div", class_="article__text")
-            article_quote = item.findNext("div", class_="article__quote-text m-small")
-            if article_text:
-                article_text_chunks.append(article_text.getText(strip=True))
-            if article_quote:
-                article_text_chunks.append(article_quote.getText(strip=True))
-        return " ".join(article_text_chunks)
-
-    def __get_title_news(self, soup: BeautifulSoup) -> str:
-        article_header = soup.find("div", class_="article__header")
-        if article_header:
-            article_title_div = article_header.find("div", class_="article__title")
-            if article_title_div:
-                return article_title_div.getText(strip=True)
-            article_title_h1 = article_header.find("h1", class_="article__title")
-            if article_title_h1:
-                return article_title_h1.getText(strip=True)
 
     def __get_news_urls(self, next_pages_urls: list[str]) -> list[str]:
         result = []
