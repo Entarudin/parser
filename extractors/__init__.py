@@ -1,0 +1,3 @@
+from .ria_news_title_extractor import RiaNewsTitleExtractor
+from .ria_news_description_extractor import RiaNewsDescriptionExtractor
+from .ria_news_date_publication_extractor import RiaNewsDatePublicationExtractor
