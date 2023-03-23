@@ -1,5 +1,9 @@
 from structure import structure
-from constants import OUTPUT_FILE, CHANNELS_NAMES, RIA_NEWS_KEYWORDS
+from constants import (
+    OUTPUT_FILE,
+    CHANNELS_NAMES,
+    RIA_NEWS_KEYWORD
+)
 
 
 def scrape():
@@ -9,7 +13,7 @@ def scrape():
     exposures_repository = structure.exposures_repository
 
     exposures_from_telegram_channels = telegram_scraper.scrape_channels(CHANNELS_NAMES)
-    exposures_from_ria_news = ria_news_scraper.scrape(RIA_NEWS_KEYWORDS)
+    exposures_from_ria_news = ria_news_scraper.scrape(RIA_NEWS_KEYWORD)
     exposures = exposures_from_telegram_channels + exposures_from_ria_news
     statistics = exposures_statistics_service.get_statistics_by_type(exposures)
 
