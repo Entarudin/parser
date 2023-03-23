@@ -3,9 +3,13 @@ from telethon.tl.functions.messages import GetHistoryRequest
 from datetime import datetime, timedelta
 import re
 
-from parsers import ExposureTypeParser, DatabaseIdentifiersParser, ExposureTitleParser
-from constants import UNIQUE_KEYWORDS, TypeExposuresEnum
-from models import Exposure, StatisticsExposures
+from parsers import (
+    ExposureTypeParser,
+    DatabaseIdentifiersParser,
+    ExposureTitleParser
+)
+from constants import UNIQUE_KEYWORDS
+from models import Exposure
 
 
 class TelegramScraper:
@@ -47,29 +51,10 @@ class TelegramScraper:
             offset_id = messages[len(messages) - 1].id
         return exposures
 
-    def get_statistics_by_type(self, exposures: list[Exposure]) -> StatisticsExposures:
-        statistics_exposures = StatisticsExposures()
-        statistics_exposures.summary = len(exposures)
-        type_to_number = {
-            TypeExposuresEnum.THREAT.value: 0,
-            TypeExposuresEnum.ATTACK.value: 0,
-            TypeExposuresEnum.INCIDENT.value: 0,
-            TypeExposuresEnum.VULNERABILITY.value: 0
-        }
-        for item in exposures:
-            if item.type not in type_to_number.keys():
-                continue
-            type_to_number[item.type] += 1
-        statistics_exposures.assign_type_to_number(type_to_number)
-        return statistics_exposures
-
     def __build_exposures_from_messages(self, messages: list, channel_name: str) -> list[Exposure]:
         exposures = []
         for message in messages:
             text = str(message.message)
-            half_of_year_days = 180
-            if self.__get_difference_in_days(message.date.isoformat()) > half_of_year_days:
-                continue
             if not self.__is_part_in_list_by_unique_keywords(text, UNIQUE_KEYWORDS):
                 continue
             exposure = self.__build_exposure(channel_name, message.id, message.message, message.date)

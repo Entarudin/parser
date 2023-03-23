@@ -5,7 +5,10 @@ from translators import (
     ExposureTranslator,
     StatisticsExposuresTranslator
 )
-from services import ConfigService
+from services import (
+    ConfigService,
+    ExposuresStatisticsService
+)
 from repositories import ExposuresRepository
 from wrappers import (
     MatplotlibWrapper,
@@ -179,6 +182,10 @@ class Structure:
     @cached_property
     def ria_news_title_extractor(self):
         return RiaNewsTitleExtractor()
+
+    @cached_property
+    def exposures_statistics_service(self):
+        return ExposuresStatisticsService()
 
 
 structure = Structure()
