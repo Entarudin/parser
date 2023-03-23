@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from time import sleep
 from datetime import datetime
 
 from models import Exposure
@@ -122,7 +121,6 @@ class RiaNewsScraper:
 
     def __get_soup_by_request(self, url: str) -> BeautifulSoup:
         with requests.Session() as session:
-            sleep(3)
             response = session.get(url)
             page_source = response.text
             soup = BeautifulSoup(page_source, "lxml")
