@@ -13,7 +13,7 @@ CHANNELS_NAMES = [
     "cibsecurity"
 ]
 
-OUTPUT_FILE = "channel_exposures.json"
+OUTPUT_FILE = "exposures.json"
 
 
 class TypeExposuresEnum(str, Enum):
@@ -512,6 +512,5 @@ KEYWORD_EXPOSURE_TYPE_PAIRS = [
 
 BASE_URL_RIA_NEWS = "https://ria.ru"
 
-RIA_NEWS_KEYWORDS = {
-    "keyword_khakery"
-}
+RIA_NEWS_KEYWORD = "keyword_khakery"
+
