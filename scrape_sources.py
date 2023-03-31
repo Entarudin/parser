@@ -1,8 +1,10 @@
+from time import sleep
 from structure import structure
 from constants import (
     OUTPUT_FILE,
     CHANNELS_NAMES,
-    RIA_NEWS_KEYWORD
+    RIA_NEWS_KEYWORD,
+    ONE_DAY_IN_SECOND
 )
 
 
@@ -21,4 +23,6 @@ def scrape():
 
 
 if __name__ == '__main__':
-    scrape()
+    while True:
+        scrape()
+        sleep(ONE_DAY_IN_SECOND)
