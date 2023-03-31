@@ -14,7 +14,7 @@ def scrape():
 
     exposures_from_telegram_channels = telegram_scraper.scrape_channels(CHANNELS_NAMES)
     exposures_from_ria_news = ria_news_scraper.scrape(RIA_NEWS_KEYWORD)
-    exposures = exposures_from_telegram_channels + exposures_from_ria_news
+    exposures = exposures_from_ria_news + exposures_from_telegram_channels
     statistics = exposures_statistics_service.get_statistics_by_type(exposures)
 
     exposures_repository.save_on_json_file(OUTPUT_FILE, exposures, statistics)

@@ -514,3 +514,4 @@ BASE_URL_RIA_NEWS = "https://ria.ru"
 
 RIA_NEWS_KEYWORD = "keyword_khakery"
 
+ONE_DAY_IN_SECOND = 86_400

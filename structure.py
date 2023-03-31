@@ -127,7 +127,7 @@ class Structure:
     @cached_property
     def exposures_repository(self):
         return ExposuresRepository(
-            self.exposures_translator,
+            self.exposure_translator,
             self.statistics_exposures_translator
         )
 
